@@ -45,3 +45,10 @@ AnalogReader(uint16_t noiseThreshold, uint16_t recentValuesAmount, uint8_t pin, 
 readMin and readMax are used to counter for imperfect components. <br> 
 <b>Example:</b>
 My potenciometer should be able to provide values between 0 - 1023, but realistically its range is somwhere around 50 - 1000,<br> so I would set readMin tp 50 and readMax to 1000.
+
+
+<h2>Functions: </h2>
+getCurrentValue()
+getReadMin()
+getReadMax()
+setPin(uint8_t pin)
