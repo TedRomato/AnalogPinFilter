@@ -6,9 +6,10 @@ class AnalogReader{
   public:
     AnalogReader(uint16_t noiseThreshold, uint16_t recentValuesAmount, uint8_t pin, uint16_t readMin, uint16_t readMax);
     uint16_t getCurrentValue();
+    uint16_t getCurrentValueMapped(uint16_t min, uint16_t max);
     uint16_t getReadMax();
     uint16_t getReadMin();
-    void update();
+    boolean update();
     void setPin(uint8_t pin);
     
   private:
