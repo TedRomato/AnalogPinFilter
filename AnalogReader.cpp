@@ -26,6 +26,12 @@ uint16_t AnalogReader::getCurrentValue()
   return _currentValue;
 }
 
+uint16_t AnalogReader::getCurrentValueMapped(uint16_t min, uint16_t max)
+{
+  return map(this->getCurrentValue(), this->getReadMin(), this->getReadMax(), min, max);
+}
+
+
 uint16_t AnalogReader::getReadMin()
 {
   return _readMin;
@@ -42,7 +48,9 @@ void AnalogReader::setPin(uint8_t pin)
 }
 
 
-void AnalogReader::update()
+
+// returns true if new value is loaded to _currentValue, otherwise returns false
+boolean AnalogReader::update()
 {  
   uint16_t analogVal = analogRead(_pin);
   if(analogVal < _readMin){
@@ -67,6 +75,11 @@ void AnalogReader::update()
   int avg = accumulator/_recentValuesAmount;
   if(avg > _currentValue + _noiseThreshold || avg < _currentValue - _noiseThreshold){
     _currentValue = avg;
+    return true;
+  } else if((avg == _readMin || avg == _readMax) && _currentValue != avg) {
+    _currentValue = avg;
+    return true;
   }
   
+  return false;
 } 
