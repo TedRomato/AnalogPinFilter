@@ -4,11 +4,12 @@
 
 class AnalogReader{
   public:
-    AnalogReader(uint16_t noiseThreshold, uint16_t recentValuesAmount, uint8_t pin, uint16_t readMin, uint16_t readMax);
-    uint16_t getCurrentValue();
-    uint16_t getCurrentValueMapped(uint16_t min, uint16_t max);
-    uint16_t getReadMax();
-    uint16_t getReadMin();
+    AnalogReader(int16_t outputRangeMin, int16_t outputRangeMax, uint16_t recentValuesAmount, uint8_t pin, uint16_t readMin, uint16_t readMax);
+    uint16_t getCurrentValueRaw();
+    int16_t getCurrentValue();
+    void setOutputRange(int16_t rangeMin, int16_t rangeMax);
+    int16_t getOutputRangeMax();
+    int16_t getOutputRangeMin();
     boolean update();
     void setPin(uint8_t pin);
     
@@ -20,6 +21,8 @@ class AnalogReader{
     uint16_t _recentValuesAmount;
     uint16_t *_recentValues;
     uint16_t _noiseThreshold;
+    int16_t _outputRangeMin;
+    int16_t _outputRangeMax;
 };
 
 #endif
