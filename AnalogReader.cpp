@@ -1,18 +1,13 @@
 #include "Arduino.h"
 #include "AnalogReader.h"
 
-
-// noiseThreshold - a range in which read value is considered noise
-// recentValuesAmount - how many values are remembered in the array -> the more the slower responsivnes, but better filtering
-// pin - analog pin to read from 
-// readMin - minimal value that can be consistently read
-// readMax - maximal value that can be consistently read
-
-AnalogReader::AnalogReader(uint16_t noiseThreshold, uint16_t recentValuesAmount, uint8_t pin, uint16_t readMin, uint16_t readMax)
+AnalogReader::AnalogReader(int16_t outputRangeMin, int16_t outputRangeMax, uint16_t recentValuesAmount, uint8_t pin, uint16_t readMin, uint16_t readMax)
 {
   _readMin = readMin;
   _readMax = readMax; 
-  _noiseThreshold = noiseThreshold;
+  _outputRangeMin = outputRangeMin;
+  _outputRangeMax = outputRangeMax;
+  _noiseThreshold = (readMax - readMin) / (outputRangeMax - outputRangeMin);
   _recentValuesAmount = recentValuesAmount;
   _pin = pin;
   _recentValues = malloc(sizeof(uint16_t) * _recentValuesAmount); 
@@ -21,26 +16,36 @@ AnalogReader::AnalogReader(uint16_t noiseThreshold, uint16_t recentValuesAmount,
 }
 
 
-uint16_t AnalogReader::getCurrentValue()
+uint16_t AnalogReader::getCurrentValueRaw()
 {
   return _currentValue;
 }
 
-uint16_t AnalogReader::getCurrentValueMapped(uint16_t min, uint16_t max)
+int16_t AnalogReader::getCurrentValue()
 {
-  return map(this->getCurrentValue(), this->getReadMin(), this->getReadMax(), min, max);
+
+  return map(_currentValue, _readMin, _readMax, _outputRangeMin, _outputRangeMax);
 }
 
 
-uint16_t AnalogReader::getReadMin()
+void AnalogReader::setOutputRange(int16_t rangeMin, int16_t rangeMax)
 {
-  return _readMin;
+  _outputRangeMin = rangeMin;
+  _outputRangeMax = rangeMax;
+  _noiseThreshold = (_readMax - _readMin) / (_outputRangeMax - _outputRangeMin);
 }
 
-uint16_t AnalogReader::getReadMax()
+
+int16_t AnalogReader::getOutputRangeMin()
 {
-  return _readMax;
+  return _outputRangeMin;
 }
+
+int16_t AnalogReader::getOutputRangeMax()
+{
+  return _outputRangeMax;
+}
+
 
 void AnalogReader::setPin(uint8_t pin)
 {
@@ -83,3 +88,4 @@ boolean AnalogReader::update()
   
   return false;
 } 
+
