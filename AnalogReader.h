@@ -4,13 +4,34 @@
 
 class AnalogReader{
   public:
-    AnalogReader(int16_t outputRangeMin, int16_t outputRangeMax, uint16_t recentValuesAmount, uint8_t pin, uint16_t readMin, uint16_t readMax);
+    // Creates instance of analog reader
+    AnalogReader(
+      int16_t outputRangeMin, // determines minimal output value
+      int16_t outputRangeMax, // determines maximal output value
+      uint16_t recentValuesAmount, // how many values from previous reads should be held to calculate avreage (the bigger the value, the better noise filtering, but the slower reaction to change) 
+      uint8_t pin, // pin to read from
+      uint16_t readMin, // minimal value analog can provide
+      uint16_t readMax // maximal value analog can provide
+    );
+  
+    // get current value not mapped to outputRangeMin;outputRangeMax
     uint16_t getCurrentValueRaw();
+  
+    // get current value mapped to outputRangeMin;outputRangeMax
     int16_t getCurrentValue();
+  
+    // sets output range
     void setOutputRange(int16_t rangeMin, int16_t rangeMax);
+  
     int16_t getOutputRangeMax();
+  
     int16_t getOutputRangeMin();
+  
+    // this function updates analog reader values, and should get called as often as possible
+    // returns true, if mapped value got changed
     boolean update();
+  
+    // sets pin to read analog input from
     void setPin(uint8_t pin);
     
   private:
