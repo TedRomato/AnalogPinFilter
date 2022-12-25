@@ -7,12 +7,9 @@ AnalogReader::AnalogReader(int16_t outputRangeMin, int16_t outputRangeMax, uint1
   _readMax = readMax; 
   _outputRangeMin = outputRangeMin;
   _outputRangeMax = outputRangeMax;
-  _noiseThreshold = (readMax - readMin) / (outputRangeMax - outputRangeMin);
+  _noiseThreshold = (readMax - readMin) / (outputRangeMax - outputRangeMin) - 1;
   _recentValuesAmount = recentValuesAmount;
   _pin = pin;
-  _recentValues = malloc(sizeof(uint16_t) * _recentValuesAmount); 
-
-  memset(_recentValues, 0, sizeof(uint16_t) * _recentValuesAmount);
 }
 
 
