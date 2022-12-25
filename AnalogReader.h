@@ -40,7 +40,7 @@ class AnalogReader{
     uint16_t _readMax;
     uint16_t _currentValue;
     uint16_t _recentValuesAmount;
-    uint16_t *_recentValues;
+    uint16_t _recentValues[25];
     uint16_t _noiseThreshold;
     int16_t _outputRangeMin;
     int16_t _outputRangeMax;
